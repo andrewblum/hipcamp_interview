@@ -1,34 +1,48 @@
 import React from 'react';
 import axios from 'axios';
+import Todo from './Todo.js'
 
-import logo from './logo.svg';
 import './App.css';
 
 class App extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {todos : null}
+    this.renderTodos = this.renderTodos.bind(this);
+  }
 
   async componentDidMount() {
-    let response = await axios.get('/hi')
-    console.log(response)
+    let todos = await axios.get('/todos')
+    console.log(todos.data)
+    this.setState({todos: todos.data})
+
+    let data = {
+      key: 'val',
+      key2: 'val2'
+    }
+    let response2 = await axios.post('/post', data)
+    console.log(response2.data['hi'])
+  }
+
+  renderTodos() {
+    let todos = []
+    for (let key in this.state.todos) {
+      todos.push(<Todo 
+        title = {this.state.todos[key].title}
+        done = {this.state.todos[key].done}/>)
+    }
+    console.log(todos)
+    return todos
   }
 
   render() {
+    if (this.state.todos == null) {
+      return (<div> Loading ... </div>)
+    }
+
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-            Can you see me world?
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        {this.renderTodos()}
       </div>
     )
   }
