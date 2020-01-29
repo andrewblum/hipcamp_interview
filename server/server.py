@@ -102,8 +102,6 @@ def is_game_over():
     return winner 
 
 
-    
-
 @app.route('/board', methods=['PUT'])
 def update_board():
     

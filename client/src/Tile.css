@@ -1,0 +1,7 @@
+.tile {
+    font-size: 100px;
+}
+
+.tile:hover {
+    cursor: pointer;
+}
