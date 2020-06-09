@@ -1,7 +1,17 @@
 .tile {
     font-size: 100px;
+    border: solid black 3px;
+    width: 20vw;
+    height: 20vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .tile:hover {
     cursor: pointer;
+}
+
+.marker {
+
 }

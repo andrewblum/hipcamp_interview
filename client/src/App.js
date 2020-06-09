@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import Tile from './Tile.js'
 
@@ -11,9 +11,15 @@ class App extends React.Component {
       board: null, 
       current_player: 'X', 
       game_over: false,
-      winner: '-'
+      winner: ' '
     }
     this.makeMove = this.makeMove.bind(this);
+    this.restart = this.restart.bind(this);
+  }
+
+  async restart() {
+    let board = await axios.post('/restart')
+    this.setState({board: board.data})
   }
 
   async componentDidMount() {
@@ -55,7 +61,7 @@ class App extends React.Component {
   renderBoard() {
     return (
       <div className='board'> 
-        <div className='row'> 
+        <div className='row row-1'>
           <Tile x={0} y={0} 
             board={this.state.board} 
             onClick={this.makeMove}> 
@@ -69,7 +75,7 @@ class App extends React.Component {
             onClick={this.makeMove}> 
           </Tile>          
         </div>
-        <div className='row'> 
+        <div className='row row-2'> 
           <Tile x={1} y={0} 
             board={this.state.board} 
             onClick={this.makeMove}> 
@@ -83,7 +89,7 @@ class App extends React.Component {
             onClick={this.makeMove}> 
           </Tile>
         </div>
-        <div className='row'> 
+        <div className='row row-3'> 
           <Tile x={2} y={0} 
             board={this.state.board} 
             onClick={this.makeMove}> 
@@ -119,6 +125,9 @@ class App extends React.Component {
       <div className="App">
         Current player: {this.state.current_player}
         { this.renderBoard() }
+        <button onClick={this.restart} className='restart'> 
+          Restart 
+        </button>
       </div>
     )
   }

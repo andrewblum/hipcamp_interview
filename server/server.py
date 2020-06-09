@@ -67,16 +67,16 @@ def delete_todo(id):
     else:
         return 'Invalid', 400
 
-board = [['-', '-', '-'],
-        ['-', '-', '-'],
-        ['-', '-', '-']]
+board = [[' ', ' ', ' '],
+        [' ', ' ', ' '],
+        [' ', ' ', ' ']]
 
 @app.route('/board')
 def get_board():
     return jsonify(board)
 
 def is_game_over(): 
-    winner = '-'
+    winner = ' '
     for row in range(3):
         val = board[row][0] + board[row][1] + board[row][2] 
         if val == 'XXX': 
@@ -101,13 +101,16 @@ def is_game_over():
         winner = 'O'
     return winner 
 
+@app.route('/restart', methods=['POST'])
+def restart():
+    board[0] = [' ', ' ', ' ']
+    board[1] = [' ', ' ', ' ']
+    board[2] = [' ', ' ', ' ']
+    return jsonify(board)
 
 @app.route('/board', methods=['PUT'])
 def update_board():
-    
     data = request.get_json()
-    print('got here')
-    print(data)
     x = int(data.get('x'))
     y = int(data.get('y'))
     value = data.get('value')
@@ -116,18 +119,18 @@ def update_board():
         return 'Invalid Move', 400
     if value != 'X' and value != 'O':
         return 'Invalid Move', 400
-    if board[x][y] != '-':
+    if board[x][y] != ' ':
         return 'Invalid Move', 400
     board[x][y] = value
 
     game_over = False
     winner = is_game_over()
-    if winner != '-':
+    if winner != ' ':
         game_over = True
     
     data = {
         'board': board,
-        'game_over': winner != '-',
+        'game_over': winner != ' ',
         'winner': winner
     }  
 
