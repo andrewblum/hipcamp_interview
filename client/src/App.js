@@ -12,12 +12,13 @@ function App() {
   const [winner, setWinner] = useState(' ');
 
   function restart() {
-    let board = axios.post('/restart')
-    setBoard(board.data)
+    axios.post('/restart')
+    .then(board => setBoard(board.data))
   }
 
   useEffect(() => {
-    axios.get('/board').then(board => setBoard(board.data))
+    axios.get('/board')
+    .then(board => setBoard(board.data))
 
     // let data = {
     //   key: 'val',
@@ -39,11 +40,13 @@ function App() {
       value: currentPlayer
     }
 
-    const moveResult = axios.put('/board', move)
-    setBoard(moveResult.data.board)
-    setCurrentPlayer(newPlayer)
-    setGameOver(moveResult.data.game_over)
-    setWinner(moveResult.data.winner)
+    axios.put('/board', move)
+    .then(moveResult => {
+      setBoard(moveResult.data.board)
+      setCurrentPlayer(newPlayer)
+      setGameOver(moveResult.data.game_over)
+      setWinner(moveResult.data.winner)
+    })
   }
 
   function renderBoard() {
