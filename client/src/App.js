@@ -19,27 +19,15 @@ function App() {
   useEffect(() => {
     axios.get('/board')
     .then(board => setBoard(board.data))
-
-    // let data = {
-    //   key: 'val',
-    //   key2: 'val2'
-    // }
-    // let response2 = await axios.post('/post', data)
-    // console.log(response2.data['hi'])
   });
 
   function makeMove(x, y) {
-    let newPlayer = 'X'
-    if (currentPlayer ==='X') {
-      newPlayer = 'O'
-    }
-
+    let newPlayer = currentPlayer === 'X' ? 'O' : 'X'
     const move = {
       x,
       y,
       value: currentPlayer
     }
-
     axios.put('/board', move)
     .then(moveResult => {
       setBoard(moveResult.data.board)
