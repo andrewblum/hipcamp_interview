@@ -11,14 +11,13 @@ function App() {
   const [gameOver, setGameOver] = useState(false);
   const [winner, setWinner] = useState(' ');
 
-  async function restart() {
-    let board = await axios.post('/restart')
+  function restart() {
+    let board = axios.post('/restart')
     setBoard(board.data)
   }
 
   useEffect(() => {
-    let board = await axios.get('/board')
-    setBoard(board.data)
+    axios.get('/board').then(board => setBoard(board.data))
 
     // let data = {
     //   key: 'val',
@@ -28,79 +27,79 @@ function App() {
     // console.log(response2.data['hi'])
   });
 
-  async makeMove(x, y) {
-    let new_player = 'X'
-    if (current_player =='X') {
-      new_player = 'O'
+  function makeMove(x, y) {
+    let newPlayer = 'X'
+    if (currentPlayer ==='X') {
+      newPlayer = 'O'
     }
 
     const move = {
       x,
       y,
-      value: current_player
+      value: currentPlayer
     }
 
-    const moveResult = await axios.put('/board', move)
+    const moveResult = axios.put('/board', move)
     setBoard(moveResult.data.board)
-    setCurrentPlayer(new_player)
+    setCurrentPlayer(newPlayer)
     setGameOver(moveResult.data.game_over)
     setWinner(moveResult.data.winner)
   }
 
-  renderBoard() {
+  function renderBoard() {
     return (
       <div className='board'> 
         <div className='row row-1'>
           <Tile x={0} y={0} 
             board={board} 
-            onClick={this.makeMove}> 
+            onClick={makeMove}> 
           </Tile>
           <Tile x={0} y={1} 
             board={board} 
-            onClick={this.makeMove}> 
+            onClick={makeMove}> 
           </Tile>
           <Tile x={0} y={2} 
             board={board} 
-            onClick={this.makeMove}> 
+            onClick={makeMove}> 
           </Tile>          
         </div>
         <div className='row row-2'> 
           <Tile x={1} y={0} 
             board={board} 
-            onClick={this.makeMove}> 
+            onClick={makeMove}> 
           </Tile>
           <Tile x={1} y={1} 
             board={board} 
-            onClick={this.makeMove}> 
+            onClick={makeMove}> 
           </Tile>
           <Tile x={1} y={2} 
             board={board} 
-            onClick={this.makeMove}> 
+            onClick={makeMove}> 
           </Tile>
         </div>
         <div className='row row-3'> 
           <Tile x={2} y={0} 
             board={board} 
-            onClick={this.makeMove}> 
+            onClick={makeMove}> 
           </Tile>
           <Tile x={2} y={1} 
             board={board} 
-            onClick={this.makeMove}> 
+            onClick={makeMove}> 
           </Tile>
           <Tile x={2} y={2} 
             board={board} 
-            onClick={this.makeMove}> 
+            onClick={makeMove}> 
           </Tile>
         </div>
       </div>
     )
   }
 
-  if (board == null) {
+  if (board === null) {
     return (<div> Loading ... </div>)
   }
 
-  if (game_over) { 
+  if (gameOver) { 
     return ( 
       <div>
         game over screen! 
@@ -111,9 +110,9 @@ function App() {
 
   return (
     <div className="App">
-      Current player: {current_player}
-      { this.renderBoard() }
-      <button onClick={this.restart} className='restart'> 
+      Current player: {currentPlayer}
+      { renderBoard() }
+      <button onClick={restart} className='restart'> 
         Restart 
       </button>
     </div>
